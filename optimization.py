@@ -87,7 +87,7 @@ def printschedule(r):
                                                       ret[0],ret[1],ret[2])
                                                       
 
-#cost function
+
 """
 The goal of any optimization algorithm is
 to find a set of inputs—flights, in this case—that minimizes the cost function, so the
@@ -104,6 +104,7 @@ at airports for the various members of the family. It also adds a penalty of $50
 car is returned at a later time of the day than when it was rented
 """
 
+#cost function
 def schedulecost(sol):
     totalprice=0
     latestarrival=0
@@ -144,11 +145,17 @@ to the airport for the earliest departure
 
 
 #random searching
+#This function randomly generates 1,000 guesses and calls costf on them
+#and keeps track of the best guess (the one with the lowest cost)and returns it
+#Domain is a list of 2-tuples that specify the minimum and maximum values for each variable. The length of the solution is the
+#same as the length of this list. In the current example, there are nine outbound flights
+#and nine inbound flights for every person, so thedomainin the list is (0,8) repeated
+#twice for each person.
 def randomoptimize(domain,costf):
     best=999999999
     bestr=None
     for i in range(1000):
-        # Create a random solution
+        # Create 1000 random solution sets
         r=[random.randint(domain[i][0],domain[i][1])
            for i in range(len(domain))]
         # Get the cost
@@ -160,9 +167,84 @@ def randomoptimize(domain,costf):
             
     return r  
 
+"""
+Domainis a list of 2-tuples that specify the
+minimum and maximum values for each variable. The length of the solution is the
+same as the length of this list. In the current example, there are nine outbound flights
+and nine inbound flights for every person, so thedomainin the list is (0,8) repeated
+twice for each person.
+"""
 
 
+"""
+Randomly trying different solutions is very inefficient because it does not take 
+advantage of the good solutions that have already been discovered.
+"""
+
+
+"""
+An alternate method of random searching is called hill climbing. Hill climbing starts
+with a random solution and looks at the set of neighboring solutions for those that
+are better (have a lower cost function). 
+"""
+
+#hill climbing
+#domain=[(0,8)]*(len(optimization.people)*2)
+#domain
+#[(0, 8), (0, 8), (0, 8), (0, 8), (0, 8), (0, 8), (0, 8), (0, 8), (0, 8), (0, 8), (0, 8), (0, 8)]
+# for j in range(12)   it will be 0,1,2,.... 11
+def hillclimb(domain,costf):
+    # Create a random solution
+    sol=[random.randint(domain[i][0],domain[i][1])    
+       for i in range(len(domain))] 
+    
+    #main loop
+    #infinite loop
+    while 1:
+        
+        # Create list of neighboring solutions
+        neighbors=[]
+        for j in range(len(domain)):
+            
+            # One away in each direction 
+            # here domain[j][0] =0 and domain[j][1]=1
+            # below we are appending two list with the j-th element 1 less and 1 greater 
+            if sol[j]>domain[j][0]:
+                neighbors.append(sol[0:j]+[sol[j]+1]+sol[j+1:])
+            if sol[j]<domain[j][1]:
+                neighbors.append(sol[0:j]+[sol[j]-1]+sol[j+1:])
+                
+        # See what the best solution amongst the neighbors is
+        current=costf(sol)
+        best=current
+        for j in range(len(neighbors)):
+            cost=costf(neighbors[j])
+            if cost<best:
+                best=cost
+                sol=neighbors[j]
+
+        # If there's no improvement, then we've reached the top
+        if best==current:
+            break
+    #loop ends        
+        
+    return sol        
+                
+    
+"""
+The final solution will be a local minimum, a solution
+better than those around it but not the best overall. The best overall is called the
+global minimum, which is what optimization algorithms are ultimately supposed to
+find. One approach to this dilemma is calledrandom-restart hill climbing, where the
+hill climbing algorithm is run several times with random starting points in the hope
+that one of them will be close to the global minimum. 
+"""
+
+# simulated annealing and genetics algorithms are way to avoid  getting struck in local minima
+
+ 
       
+#genetic algorithms
         
 
                                                       
