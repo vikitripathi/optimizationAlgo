@@ -270,7 +270,7 @@ def geneticoptimize(domain,costf,popsize=50,step=1,mutprod=0.2,elite=0.2,maxiter
         i=random.randint(1,len(domain)-2)
         return r1[0:i]+r2[i:]                                                      
 
-    # Build the initial population
+    # Build the initial population ie set of  random solutions
     pop=[]
     for i in range(popsize):
         #vec is a random solution
@@ -286,12 +286,15 @@ def geneticoptimize(domain,costf,popsize=50,step=1,mutprod=0.2,elite=0.2,maxiter
     for i in range(maxiter):
         scores=[(costf(v),v) for v in pop]
         scores.sort( )
-        ranked=[v for (s,v) in scores]
+        ranked=[v for (s,v) in scores] # ranked list of solutions
 
         # Start with the pure winners
+        # here we change  the length of pop list
+        #to create the next generation of 'pop'
+        #top solutions are added to the new generation 'elitism'
         pop=ranked[0:topelite]
 
-        # Add mutated and bred forms of the winners
+        # Add mutated and bred forms of the winners to the new generation
         while len(pop)<popsize:
             if random.random( )< mutprod:
                 # Mutation
@@ -306,4 +309,4 @@ def geneticoptimize(domain,costf,popsize=50,step=1,mutprod=0.2,elite=0.2,maxiter
         # Print current best score
         print scores[0][0]
 
-    return scores[0][1]    
+    return scores[0][1]     
