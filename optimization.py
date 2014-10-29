@@ -119,14 +119,16 @@ values for worse solutions
 """
 #After choosing some variables that impose costs, you’ll need to determine how to
 #combine them into a single number.
+
+
+
 """
+This Cost Function::
 There are a huge number of possibilities for the getcost function defined here. This
 function takes into account the total cost of the trip and the total time spent waiting
 at airports for the various members of the family. It also adds a penalty of $50 if the
 car is returned at a later time of the day than when it was rented
 """
-
-
 #cost function or the Objective Function
 def schedulecost(sol):
     totalprice=0
@@ -134,10 +136,11 @@ def schedulecost(sol):
     earliestdep=24*60 #to charge extra 50 for a extra day of car , time in minutes
     
     for d in range(len(sol)/2):
+        rd=d*2 #to traverse through the list r 
         # Get the inbound and outbound flights
         origin=people[d][1]
-        outbound=flights[(origin,destination)][int(sol[d])]
-        returnf=flights[(destination,origin)][int(sol[d+1])]
+        outbound=flights[(origin,destination)][int(sol[rd])]
+        returnf=flights[(destination,origin)][int(sol[rd+1])]
 
         # Total price is the price of all outbound and return flights
         totalprice+=outbound[2]
@@ -147,23 +150,31 @@ def schedulecost(sol):
         if latestarrival < getminutes(outbound[1]): latestarrival=getminutes(outbound[1])
         if earliestdep > getminutes(returnf[0]): earliestdep=getminutes(returnf[0])
 
-    # Every person must wait at the airport until the latest person arrives.
-    # They also must arrive at the same time and wait for their flights.
+    # Every person must wait at the airport until the latest(last) person arrives.
+    # They also must arrive at the same time as the 'earliestdep'  and wait for their flights.
     totalwait=0
-    for d in range(len(sol)/2):            
+    for d in range(len(sol)/2):  
+            rd=d*2 #to traverse through the list r           
             origin=people[d][1]
-            outbound=flights[(origin,destination)][int(sol[d])]
-            returnf=flights[(destination,origin)][int(sol[d+1])]
+            outbound=flights[(origin,destination)][int(sol[rd])]
+            returnf=flights[(destination,origin)][int(sol[rd+1])]
             totalwait+=latestarrival-getminutes(outbound[1])
             totalwait+=getminutes(returnf[0])-earliestdep 
 
     # Does this solution require an extra day of car rental? That'll be $50!
+    #describe the question properly!!
     if latestarrival > earliestdep: totalprice+=50
-    return totalprice+totalwait
+    return totalprice+totalwait #assumuing total wait cost $1 to the cost function 
+    
 """
 right now, the total wait time assumes that all the family
 members will leave the airport together when the last person arrives, and will all go
 to the airport for the earliest departure
+"""
+
+
+"""
+now as the cost function has been created , goal is to min cost by choosing correct set of numbers!!!
 """
 
 
@@ -174,6 +185,7 @@ to the airport for the earliest departure
 #same as the length of this list. In the current example, there are nine outbound flights
 #and nine inbound flights for every person, so thedomainin the list is (0,8) repeated
 #twice for each person.
+#domain=[(0,8)]*(len(optimization.people)*2)
 def randomoptimize(domain,costf):
     best=999999999
     bestr=None
@@ -188,10 +200,10 @@ def randomoptimize(domain,costf):
             best=cost
             bestr=r 
             
-    return r  
+    return bestr
 
 """
-Domainis a list of 2-tuples that specify the
+Domain is a list of 2-tuples that specify the
 minimum and maximum values for each variable. The length of the solution is the
 same as the length of this list. In the current example, there are nine outbound flights
 and nine inbound flights for every person, so thedomainin the list is (0,8) repeated
@@ -337,8 +349,10 @@ def geneticoptimize(domain,costf,popsize=50,step=1,mutprod=0.2,elite=0.2,maxiter
     
 """
 check the below issues again!!  ->
-domain
-cost function
-solution representation
+domain :Domain is a list of 2-tuples that specify the
+        minimum and maximum values for each variable. The length of the solution is the
+        same as the length of this list
+cost function :
+solution representation :
 """    
     
