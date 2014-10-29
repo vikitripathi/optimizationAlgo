@@ -240,7 +240,7 @@ def hillclimb(domain,costf):
 The final solution will be a local minimum, a solution
 better than those around it but not the best overall. The best overall is called the
 global minimum, which is what optimization algorithms are ultimately supposed to
-find. One approach to this dilemma is calledrandom-restart hill climbing, where the
+find. One approach to this dilemma is called random-restart hill climbing, where the
 hill climbing algorithm is run several times with random starting points in the hope
 that one of them will be close to the global minimum. 
 """
@@ -310,3 +310,12 @@ def geneticoptimize(domain,costf,popsize=50,step=1,mutprod=0.2,elite=0.2,maxiter
         print scores[0][0]
 
     return scores[0][1]     
+    
+    
+"""
+check the below issues again!!  ->
+domain
+cost function
+solution representation
+"""    
+    
