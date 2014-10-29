@@ -5,6 +5,26 @@ Created on Fri Oct 24 23:11:26 2014
 @author: Abhishek Dutt
 """
 
+
+"""
+Optimization technique are typically used in problems that have many possible solutions across many variables
+
+Stochastic Optimization :Stochastic optimization (SO) methods are optimization methods that generate and use random variables.
+                         Simulated Annealing and Genetic Algorithm are part of this type
+
+A random variable can take on a set of possible different values (similarly to other mathematical variables), each with an associated probability
+
+In computer science, artificial intelligence, and mathematical optimization, a heuristic is a technique designed for solving a problem more 
+quickly when classic methods are too slow, or for finding an approximate solution when classic methods fail to find any exact solution.
+This is achieved by trading optimality, completeness, accuracy, or precision for speed. In a way, it can be considered a shortcut.
+
+In the computer science field of artificial intelligence, a genetic algorithm (GA) is a search heuristic that 
+mimics the process of natural selection
+Genetic algorithms belong to the larger class of evolutionary algorithms (EA), which generate solutions to optimization problems
+using techniques inspired by natural evolution, such as inheritance, mutation, selection, and crossover. 
+"""
+
+
 import time
 import random
 import math
@@ -74,14 +94,16 @@ representation is a list of numbers.
 Represents a solution in which Seymour takes the second flight of the day from Boston to 
 New York, and the fifth flight back to Boston on the day he returns.
 """
-
+#for d in range(6)  that is 0,1,2,3,4,5
+#range(0,6,2) prints 0,2,4,6,8,10 
 
 def printschedule(r):
     for d in range(len(r)/2):
+        rd=d*2 #to traverse through the list r 
         name=people[d][0]
         origin=people[d][1]
-        out=flights[(origin,destination)][int(r[d])]
-        ret=flights[(destination,origin)][int(r[d+1])]
+        out=flights[(origin,destination)][int(r[rd])]
+        ret=flights[(destination,origin)][int(r[rd+1])]
         print '%10s%10s %5s-%5s $%3s %5s-%5s $%3s' % (name,origin,
                                                       out[0],out[1],out[2],
                                                       ret[0],ret[1],ret[2])
@@ -104,7 +126,8 @@ at airports for the various members of the family. It also adds a penalty of $50
 car is returned at a later time of the day than when it was rented
 """
 
-#cost function
+
+#cost function or the Objective Function
 def schedulecost(sol):
     totalprice=0
     latestarrival=0
