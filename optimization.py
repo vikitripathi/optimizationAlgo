@@ -298,9 +298,11 @@ maxiter: the no of gen to run
 def geneticoptimize(domain,costf,popsize=50,step=1,mutprod=0.2,elite=0.2,maxiter=100):
     # Mutation Operation
     def mutate(vec):
-        i=random.randint(0,len(domain)-1)
+        i=random.randint(0,len(domain)-1) #as random.randint(0,11) will feature any no 0,1,2,3,... 11 ie all 12 no.'s
+        #the either decrease or increase by random probability
+        #below is a good technique to control on the basis of probability        
         if random.random( )<0.5 and vec[i]>domain[i][0]:
-            return vec[0:i]+[vec[i]-step]+vec[i+1:]
+            return vec[0:i]+[vec[i]-step]+vec[i+1:] #here comes the use of step
         elif vec[i]<domain[i][1]:
             return vec[0:i]+[vec[i]+step]+vec[i+1:]    
 
@@ -318,7 +320,7 @@ def geneticoptimize(domain,costf,popsize=50,step=1,mutprod=0.2,elite=0.2,maxiter
         pop.append(vec)
         
     # How many winners from each generation?
-    topelite=int(elite*popsize)
+    topelite=int(elite*popsize) #10
 
 
     # Main loop
@@ -331,9 +333,9 @@ def geneticoptimize(domain,costf,popsize=50,step=1,mutprod=0.2,elite=0.2,maxiter
         # here we change  the length of pop list
         #to create the next generation of 'pop'
         #top solutions are added to the new generation 'elitism'
-        pop=ranked[0:topelite]
+        pop=ranked[0:topelite] #new population made , old list deleted by the assignment operator
 
-        # Add mutated and bred forms of the winners to the new generation
+        # Add mutated and bred forms of the any winners (random selection) to the new generation
         while len(pop)<popsize:
             if random.random( )< mutprod:
                 # Mutation
